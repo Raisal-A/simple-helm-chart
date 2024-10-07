@@ -1,0 +1,32 @@
+# simple-applicationset.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: simple-applicationset
+  namespace: argocd
+spec:
+  generators:
+    - clusters:
+        selector:
+          matchLabels:
+            argocd.argoproj.io/secret-type: cluster
+            cluster_name: in-cluster
+  template:
+    metadata:
+      name: 'simple-app-{{.cluster.name}}'
+    spec:
+      project: default
+      source:
+        repoURL: 'https://github.com/<your-username>/simple-helm-chart.git'  # Replace with your GitHub username
+        path: 'simple-chart'
+        targetRevision: HEAD
+        helm:
+          valueFiles:
+            - values.yaml
+      destination:
+        server: 'https://kubernetes.default.svc'
+        namespace: 'default'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true

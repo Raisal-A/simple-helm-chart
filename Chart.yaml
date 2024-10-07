@@ -1,0 +1,5 @@
+# simple-chart/Chart.yaml
+apiVersion: v2
+name: simple-chart
+description: A simple Helm chart for demonstration
+version: 0.1.0
